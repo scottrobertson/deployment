@@ -1,0 +1,6 @@
+#!/usr/bin/php -q
+<?php
+
+// This file can do anything you want, it can also be in any language you want. Just set the Shebang at the top of the file
+
+// This file is run before the files are synchronized with your servers. It could be used to enable a maintenance page or something.
