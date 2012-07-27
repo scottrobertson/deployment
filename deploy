@@ -1,0 +1,109 @@
+#!/bin/sh
+BRANCH=$1
+IGNOREFILE='deploy/.deploy_ignore'
+
+echo '. Starting deploy'
+
+if [ ! -f "deploy/.deploy" ];
+then
+	echo ". You need to create a .deploy file"
+	exit 0
+fi
+
+if [ -z "$BRANCH" ];
+then
+	echo ". No branch has been selected"
+	exit 0
+fi
+
+echo '. Deploying' $BRANCH
+
+echo '. Parsing .deploy file'
+
+IFS='
+'
+for a in `cat deploy/.deploy | grep ^$BRANCH `
+do
+	IFS=' '
+	A=( $a )
+	SSH=${A[1]}
+	DEPLOYPATH=${A[2]}
+	CHMODTRIGGER=${A[3]}
+done 
+
+# Check SSH
+if [ -z "$SSH" ];
+then
+	echo ". No host has been set for $BRANCH"
+	exit 0
+fi
+# Check deploy path
+if [ -z "$DEPLOYPATH" ];
+then
+	echo ". No path has been set for $BRANCH"
+	exit 0
+fi
+
+echo ' - SSH:' $SSH
+echo ' - PATH:' $DEPLOYPATH
+
+if [ "$CHMODTRIGGER" = "true" ]
+then
+	echo ' - Fix Permissions: true' 
+else
+	echo ' - Fix Permissions: false'
+fi
+
+
+# If the maintenance file exists, then make it 
+if [ -f "deploy/.deploy_before" ]
+then
+	echo '. Launching deploy_before file'
+	./deploy/.deploy_before
+fi
+
+
+
+echo '. Deploying to' $SSH:$DEPLOYPATH
+
+
+if [ -f "$IGNOREFILE" ]
+then
+
+	echo ' - Using deploy_ignore file.'
+
+
+	rsync -arvz \
+	./ \
+	$SSH:$DEPLOYPATH \
+	--exclude-from $IGNOREFILE \
+
+else
+
+	echo ' - Not using deploy_ignore file.'
+
+	rsync -arvz \
+	./ \
+	$SSH:$DEPLOYPATH \
+
+fi
+
+CHMODTRIGGERCHECK="true"
+
+if [ "$CHMODTRIGGER" = "true" ]
+then
+	# Fix file permissions
+	echo '. Fixing file permissions'
+	ssh $SSH "chmod -R 755 $DEPLOYPATH;"
+else
+	echo '. Skipping file permissions fix'
+fi 
+
+
+if [ -f "deploy/.deploy_success" ]
+then
+	echo '. Launching deploy_success file on remote server'
+	ssh $SSH "cd $DEPLOYPATH; ./deploy/.deploy_success $BRANCH"
+fi
+
+echo '. Deployment finished'
