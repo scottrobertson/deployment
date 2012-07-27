@@ -1,6 +1,8 @@
-# Deployment
+# Deployment Script
 
 With this script, you can deploy a website using nothing more than Git and SSH.
 
-## Installation
+# Installation
+
+`Gain SSH access to your server`
 
