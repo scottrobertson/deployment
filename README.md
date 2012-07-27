@@ -11,12 +11,20 @@ With this script, you can deploy a website using nothing more than SSH.
 
 ## Example .deploy file
 
-`master user@example.com /home/example.com/public_html true`
+ - `master user@example.com /home/example.com/public_html true
+ beta user@example.com /home/example.com/public_html/beta true`
 
 ## Example .deploy_ignore file
 
-`.git
+ - `.git
 /tmp`
 
-<code>Test</code>
+## Example deploy command file
 
+ - `deploy beta`
+
+---------
+
+### Deploy File Config
+
+ - `branch sshlogin path fixpermissions`
