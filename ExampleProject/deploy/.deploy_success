@@ -1,4 +1,6 @@
 #!/usr/bin/php -q
 <?php
 
-// This file can do anything you want, it can also be in any language you want. Juse set the Shebang at the top of the file
+// This file can do anything you want, it can also be in any language you want. Just set the Shebang at the top of the file
+
+// This is run on the server after deployment, it could be used to clear cache, rebuild your CDN or anything you wish.
