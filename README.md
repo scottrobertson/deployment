@@ -4,6 +4,7 @@ With this script, you can deploy a website using nothing more than SSH.
 
 # Intructions
 
+ - `Add this folder to your PATH`
  - `Setup SSH access to your server`
  - `Configure the .deploy file`
  - `Configure the .deploy_ignore file`
@@ -11,13 +12,13 @@ With this script, you can deploy a website using nothing more than SSH.
 
 ## Example .deploy file
 
- - `master user@example.com /home/example.com/public_html true
- beta user@example.com /home/example.com/public_html/beta true`
+ - `master user@example.com /home/example.com/public_html true`
+ - `beta user@example.com /home/example.com/public_html/beta true`
 
 ## Example .deploy_ignore file
 
- - `.git
-/tmp`
+ - `.git`
+ - `/tmp`
 
 ## Example deploy command file
 
