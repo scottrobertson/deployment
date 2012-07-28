@@ -7,7 +7,6 @@ With this script, you can deploy a website using nothing more than SSH.
  - `Add this folder to your PATH`
  - `Setup SSH access to your server`
  - `Configure the .deploy file`
- - `Configure the .deploy_ignore file`
  - `Deploy!`
 
 ## Example .deploy file
@@ -24,6 +23,7 @@ With this script, you can deploy a website using nothing more than SSH.
 
  - `deploy beta`
 
+
 ---------
 
 ### Deploy File Config
@@ -32,5 +32,6 @@ With this script, you can deploy a website using nothing more than SSH.
 
 ### Optional Files
 
- - `.deploy_success`
- - `.deploy_before`
+ - `.deploy_success (This is run on the server once the deployment has finished. Flushing the Cache maybe?)`
+ - `.deploy_before (This will be run before files are syned to server. Compress CSS maybe?)`
+ - `.deploy_ignore (All the files/folders in this file will be ignore. One per line)`

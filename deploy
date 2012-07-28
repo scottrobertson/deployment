@@ -55,7 +55,7 @@ else
 fi
 
 
-# If the maintenance file exists, then make it 
+# If the deploy_before file exists, then run it
 if [ -f "deploy/.deploy_before" ]
 then
 	echo '. Launching deploy_before file'
