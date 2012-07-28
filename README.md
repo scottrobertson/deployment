@@ -29,3 +29,8 @@ With this script, you can deploy a website using nothing more than SSH.
 ### Deploy File Config
 
  - `branch sshlogin path fixpermissions`
+
+### Optional Files
+
+ - `.deploy_success`
+ - `.deploy_before`
