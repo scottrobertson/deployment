@@ -4,6 +4,7 @@ IGNOREFILE='deploy/.deploy_ignore'
 
 echo '. Starting deploy'
 
+# Check to see if the deploy file exists
 if [ ! -f "deploy/.deploy" ];
 then
 	echo ". You need to create a .deploy file"
