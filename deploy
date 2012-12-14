@@ -13,8 +13,10 @@ fi
 
 if [ -z "$BRANCH" ];
 then
-	echo ". No branch has been selected"
-	exit 0
+    BRANCH="master"
+    echo ". No branch defined, looking for default branch 'master'"
+	# echo ". No branch has been selected"
+	# exit 0
 fi
 
 echo '. Deploying' $BRANCH
