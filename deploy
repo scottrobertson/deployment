@@ -13,8 +13,10 @@ fi
 
 if [ -z "$BRANCH" ];
 then
-	echo ". No branch has been selected"
-	exit 0
+    BRANCH="master"
+    echo ". No branch defined, looking for default branch 'master'"
+	# echo ". No branch has been selected"
+	# exit 0
 fi
 
 echo '. Deploying' $BRANCH
@@ -30,7 +32,7 @@ do
 	SSH=${A[1]}
 	DEPLOYPATH=${A[2]}
 	CHMODTRIGGER=${A[3]}
-done 
+done
 
 # Check SSH
 if [ -z "$SSH" ];
@@ -50,10 +52,15 @@ echo ' - PATH:' $DEPLOYPATH
 
 if [ "$CHMODTRIGGER" = "true" ]
 then
-	echo ' - Fix Permissions: true' 
+	echo ' - Fix Permissions: true'
 else
 	echo ' - Fix Permissions: false'
 fi
+
+
+# allow execution of the deployment files
+chmod +x ./deploy/.deploy_before
+chmod +x ./deploy/.deploy_success
 
 
 # If the deploy_before file exists, then run it
@@ -64,17 +71,31 @@ then
 fi
 
 
+CHMODTRIGGERCHECK="true"
+
+# If we are doing a fix persmissions then do that here and inform the user
+# This will chmod folders and files
+# folder    = 755 (rwxr-xr-x)
+# file      = 644 (rw-r--r--)
+if [ "$CHMODTRIGGER" = "true" ]
+then
+    # Fix file permissions
+    echo '. Fixing file permissions'
+    ssh $SSH "find . -type d -exec chmod 755 {} \; && find . -type f -exec chmod 644 {} \;"
+else
+    echo '. Skipping file permissions fix'
+fi
+
 
 echo '. Deploying to' $SSH:$DEPLOYPATH
 
-
+# If we have an ignore file then use it
 if [ -f "$IGNOREFILE" ]
 then
 
 	echo ' - Using deploy_ignore file.'
 
-
-	rsync -arvz \
+	rsync -rvzp --executability \
 	./ \
 	$SSH:$DEPLOYPATH \
 	--exclude-from $IGNOREFILE \
@@ -83,28 +104,20 @@ else
 
 	echo ' - Not using deploy_ignore file.'
 
-	rsync -arvz \
+	rsync -rvzp --executability \
 	./ \
 	$SSH:$DEPLOYPATH \
 
 fi
 
-CHMODTRIGGERCHECK="true"
-
-if [ "$CHMODTRIGGER" = "true" ]
-then
-	# Fix file permissions
-	echo '. Fixing file permissions'
-	ssh $SSH "chmod -R 755 $DEPLOYPATH;"
-else
-	echo '. Skipping file permissions fix'
-fi 
-
-
+# If we have a deploy_success file then:
+#    - SSH into the server
+#    - cd to the deploy folder
+#    - execute the script
 if [ -f "deploy/.deploy_success" ]
 then
 	echo '. Launching deploy_success file on remote server'
-	ssh $SSH "cd $DEPLOYPATH; ./deploy/.deploy_success $BRANCH"
+	ssh $SSH "cd $DEPLOYPATH && ./deploy/.deploy_success $BRANCH"
 fi
 
 echo '. Deployment finished'
