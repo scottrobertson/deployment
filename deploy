@@ -30,7 +30,7 @@ do
 	SSH=${A[1]}
 	DEPLOYPATH=${A[2]}
 	CHMODTRIGGER=${A[3]}
-done 
+done
 
 # Check SSH
 if [ -z "$SSH" ];
@@ -50,7 +50,7 @@ echo ' - PATH:' $DEPLOYPATH
 
 if [ "$CHMODTRIGGER" = "true" ]
 then
-	echo ' - Fix Permissions: true' 
+	echo ' - Fix Permissions: true'
 else
 	echo ' - Fix Permissions: false'
 fi
@@ -67,12 +67,11 @@ fi
 
 echo '. Deploying to' $SSH:$DEPLOYPATH
 
-
+# If we have an ignore file then use it
 if [ -f "$IGNOREFILE" ]
 then
 
 	echo ' - Using deploy_ignore file.'
-
 
 	rsync -arvz \
 	./ \
