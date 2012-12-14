@@ -90,20 +90,29 @@ fi
 
 CHMODTRIGGERCHECK="true"
 
+# If we are doing a fix persmissions then do that here and inform the user
+# This will chmod folders and files
+# folder    = 757 (rwxr-xrwx)
+# file      = 644 (rw-r--r--)
 if [ "$CHMODTRIGGER" = "true" ]
 then
 	# Fix file permissions
 	echo '. Fixing file permissions'
-	ssh $SSH "chmod -R 755 $DEPLOYPATH;"
+	ssh $SSH "find $DEPLOYPATH -type d -exec chmod 757 {} \; && find $DEPLOYPATH -type f -exec chmod 644 {} \;"
 else
 	echo '. Skipping file permissions fix'
-fi 
+fi
 
 
+# If we have a deploy_success file then:
+#    - SSH into the server
+#    - cd to the deploy folder
+#    - chmod the file to allow execution
+#    - execute the script
 if [ -f "deploy/.deploy_success" ]
 then
 	echo '. Launching deploy_success file on remote server'
-	ssh $SSH "cd $DEPLOYPATH; ./deploy/.deploy_success $BRANCH"
+	ssh $SSH "cd $DEPLOYPATH && chmod +x ./deploy/.deploy_success && ./deploy/.deploy_success $BRANCH"
 fi
 
 echo '. Deployment finished'
