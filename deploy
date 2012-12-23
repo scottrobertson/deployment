@@ -95,7 +95,7 @@ then
 
 	echo ' - Using deploy_ignore file.'
 
-	rsync -rvzp --executability \
+	rsync -rvzpu --executability \
 	./ \
 	$SSH:$DEPLOYPATH \
 	--exclude-from $IGNOREFILE \
@@ -104,7 +104,7 @@ else
 
 	echo ' - Not using deploy_ignore file.'
 
-	rsync -rvzp --executability \
+	rsync -rvzpu --executability \
 	./ \
 	$SSH:$DEPLOYPATH \
 
