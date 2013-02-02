@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 BRANCH=$1
 IGNOREFILE='deploy/.deploy_ignore'
 
