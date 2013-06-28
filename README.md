@@ -1,6 +1,6 @@
 # Deployment Script
 
-With this script, you can deploy a website using nothing more than SSH. All you need to do is run the command "deploy master" or "deploy beta" or anything you wish, and the script will take care of the rest.
+With this script, you can deploy a website using nothing more than SSH and rsync. All you need to do is run the command "deploy master" or "deploy beta" or anything you wish, and the script will take care of the rest.
 
 # Intructions
 
